@@ -1,22 +1,20 @@
-# NumPy Byte-Level Transformer
+# Custom Transformer Implementation
 
-A fully functional Transformer model implemented from scratch using only **NumPy**. This project demonstrates the inner workings of the Transformer architecture, including self-attention, backpropagation, and optimization, without relying on deep learning frameworks like PyTorch or TensorFlow.
+A fully functional Transformer model implemented from scratch using **PyTorch**. This project demonstrates the inner workings of the Transformer architecture, including self-attention, backpropagation, and optimization.
 
 ## Features
 
-*   **Pure NumPy Implementation**: No automatic differentiation engines. Every forward and backward pass is manually implemented.
+*   **PyTorch Implementation**: Utilizes PyTorch for tensor operations and automatic differentiation.
 *   **Byte-Level Tokenization**: Operates directly on UTF-8 bytes (vocab size 260), allowing it to process any text string without a pre-computed vocabulary.
-*   **Custom Autograd**: `backward()` methods implemented for all layers (`Linear`, `LayerNorm`, `GELU`, `Embedding`, `MultiHeadAttention`, `Transformer`).
-*   **Optimization**: Custom `Adam` optimizer implementation.
+*   **Custom Components**: Implementation of core Transformer components (`MultiHeadAttention`, `Transformer`, `Encoder`, `Decoder`).
 *   **Training Loop**: Complete training pipeline with `CrossEntropyLoss`.
 
 ## Project Structure
 
 *   `config.py`: Configuration dataclass for model hyperparameters.
-*   `layers.py`: Core neural network layers (`Linear`, `LayerNorm`, `GELU`, `Softmax`, `Embedding`, `PositionalEncoding`) with forward and backward passes.
+*   `layers.py`: Core neural network layers.
 *   `attention.py`: Multi-Head Attention mechanism implementation.
 *   `transformer.py`: Full Transformer architecture (`Encoder`, `Decoder`, `Transformer`).
-*   `optimizer.py`: `Adam` optimizer implementation.
 *   `loss.py`: `CrossEntropyLoss` implementation.
 *   `utils.py`: Helper functions for tokenization and masking.
 *   `clean_dataset.py`: Script to clean and prepare the bilingual dataset.
@@ -26,22 +24,38 @@ A fully functional Transformer model implemented from scratch using only **NumPy
 ## Requirements
 
 *   Python 3.x
+*   PyTorch
 *   NumPy
 
 ```bash
-pip install numpy
+pip install torch numpy
 ```
 
 ## Usage
 
 ### 1. Data Preparation
 
-The project expects a bilingual dataset. If you have the raw data (e.g., from Tatoeba), run the cleaning script to format it:
+1.  Download the **Bilingual Sentence Pairs** dataset from Kaggle.
+2.  Extract the downloaded archive into the root directory of this project.
+3.  Ensure the folder is named `bilingual-sentence-pairs`.
+
+The structure should look like this:
+```
+CustomTransformer/
+├── bilingual-sentence-pairs/
+│   ├── afr.txt
+│   ├── ...
+├── clean_dataset.py
+├── train.py
+...
+```
+
+4.  Run the cleaning script to format the data:
 
 ```bash
 python clean_dataset.py
 ```
-This will process files in `bilingual-sentence-pairs/versions/3` and output cleaned data to `cleaned_data/`.
+This will process files in `bilingual-sentence-pairs` and output cleaned data to `cleaned_data/`.
 
 ### 2. Training
 
@@ -50,7 +64,7 @@ To train the model on the cleaned dataset:
 ```bash
 python train.py
 ```
-*Note: The default configuration in `train.py` uses a small model and dataset subset for demonstration purposes, as training on CPU with pure NumPy is computationally intensive.*
+*Note: The default configuration in `train.py` uses a small model and dataset subset for demonstration purposes.*
 
 ### 3. Inference / Demo
 
@@ -67,15 +81,6 @@ The model follows the standard Transformer architecture (Vaswani et al., 2017) b
 - **Encoder-Decoder**: Standard stack of encoder and decoder layers.
 - **Attention**: Scaled Dot-Product Attention with multi-head support.
 - **Activation**: GELU activation function.
-
-### Backward Pass
-Unlike frameworks that build a computation graph, this project manually calculates gradients for every operation. Each module has a `backward(grad)` method that:
-1.  Computes gradients with respect to its inputs (`dL/dx`).
-2.  Computes gradients with respect to its weights (`dL/dW`).
-3.  Returns `dL/dx` to be passed to the previous layer.
-
-### Optimization
-The `Adam` optimizer tracks first and second moments of the gradients to update parameters adaptively.
 
 ## License
 MIT

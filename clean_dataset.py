@@ -50,7 +50,7 @@ def clean_dataset(input_dir, output_dir):
     print(f"Cleaned files saved to: {output_dir}")
 
 if __name__ == "__main__":
-    INPUT_DIR = r"c:\\Users\\shaur\\OneDrive\\Desktop\\DL_Projects\\CustomTransformer\\bilingual-sentence-pairs\\versions\\3"
-    OUTPUT_DIR = r"c:\\Users\\shaur\\OneDrive\\Desktop\\DL_Projects\\CustomTransformer\\cleaned_data"
+    INPUT_DIR = os.path.join(os.getcwd(), 'bilingual-sentence-pairs')
+    OUTPUT_DIR = os.path.join(os.getcwd(), 'cleaned_data')
     
     clean_dataset(INPUT_DIR, OUTPUT_DIR)
