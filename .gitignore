@@ -1,0 +1,6 @@
+__pycache__/
+*.pth
+.txt
+
+bilingual-sentence-pairs/
+cleaned_data/
